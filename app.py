@@ -241,7 +241,7 @@ def edit_project (id):
 
     return render_template('form.html',form=form)
 
-@app.route('/delete/<int:id>',methods=['POST'])
+@app.route('/delete/<int:id>',methods=['POST','GET'])
 @login_required
 def delete_project (id):
     project=db.get_or_404(Project,id)
