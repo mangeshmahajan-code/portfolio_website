@@ -1,0 +1,39 @@
+{% from "bootstrap5/form.html" import render_form %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+
+    </style>
+</head>
+
+<body class="form-page">
+    <div class="form-card">
+        {% if add %}
+        <h2 class="form-card-title">Add <span>{{add}}</span></h2>
+        <p class="form-card-subtitle">Fill in the details below to add a new {{add}} to your portfolio.</p>
+        {% else %}
+        <h2 class="form-card-title">Admin <span>Login</span></h2>
+        <p class="form-card-subtitle">Hey admin! fill details to get access.</p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning" style='color: red;'>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% endif %}
+
+        {{ ckeditor.load() }} {{ ckeditor.config(name='description') }}
+        {{render_form(form)}}
+    </div>
+</body>
+
+</html>

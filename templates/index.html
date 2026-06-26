@@ -1,0 +1,866 @@
+{% from "bootstrap5/form.html" import render_form %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Mangesh's Portfolio</title>
+  <meta name="description"
+    content="Portfolio of Mangesh, a first-year IT student at I²IT, Pune, building toward web development and data science/ML. Deep in Python, Flask, and SQL.">
+  <meta name="keywords"
+    content="Mangesh, IT student, backend developer, Flask, Python, web development, data science, data science/ML, I2IT Pune, I²IT Pune">
+  <meta name="author" content="Mangesh">
+
+  <!-- Favicon Meta Tags -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+  <!-- Critical Script: Prevent Theme Flash -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('vane-portfolio-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    .add-project-link,
+    .add-certificate-link,
+    .add-journey-link,
+    .add-education-link,
+    .add-skill-link {
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--color-medium-brown);
+      color: var(--text-on-dark);
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .add-project-link svg,
+    .add-certificate-link svg,
+    .add-journey-link svg,
+    .add-education-link svg,
+    .add-skill-link svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+      transition: transform 0.3s ease;
+    }
+
+    .add-project-link:hover,
+    .add-certificate-link:hover,
+    .add-journey-link:hover,
+    .add-education-link:hover,
+    .add-skill-link:hover {
+      background-color: var(--bg-card);
+      color: var(--color-medium-brown);
+      border-color: var(--color-medium-brown);
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .add-project-link:hover svg,
+    .add-certificate-link:hover svg,
+    .add-journey-link:hover svg,
+    .add-education-link:hover svg,
+    .add-skill-link:hover svg {
+      transform: rotate(90deg);
+    }
+
+    .timeline-column-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 3.5rem;
+      width: 100%;
+    }
+
+    .timeline-column-header .timeline-column-title {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+
+      .add-project-link,
+      .add-certificate-link,
+      .add-journey-link,
+      .add-education-link,
+      .add-skill-link {
+        position: static;
+        margin-top: 1rem;
+        display: inline-flex;
+        width: max-content;
+        height: auto;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius-sm);
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .add-project-link svg,
+      .add-certificate-link svg,
+      .add-journey-link svg,
+      .add-education-link svg,
+      .add-skill-link svg {
+        width: 1.15em;
+        height: 1.15em;
+        margin-right: 0.5rem;
+      }
+
+      .add-project-link::after {
+        content: ' Add Project';
+      }
+
+      .add-certificate-link::after {
+        content: ' Add Certificate';
+      }
+
+      .add-journey-link::after {
+        content: ' Add Journey';
+      }
+
+      .add-education-link::after {
+        content: ' Add Education';
+      }
+
+      .add-skill-link::after {
+        content: ' Add Skill';
+      }
+
+      .add-project-link:hover,
+      .add-certificate-link:hover,
+      .add-journey-link:hover,
+      .add-education-link:hover,
+      .add-skill-link:hover {
+        transform: translateY(-2px);
+      }
+
+      .add-project-link:hover svg,
+      .add-certificate-link:hover svg,
+      .add-journey-link:hover svg,
+      .add-education-link:hover svg,
+      .add-skill-link:hover svg {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-pattern">
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Header / Navigation -->
+  <header class="header" id="header">
+    <div class="container nav-container">
+      <a href="/" class="logo" aria-label="Mangesh Homepage">
+        <svg class="logo-svg" viewBox="175 65 285 150" role="img" aria-labelledby="logoTitle logoDesc"
+          xmlns="http://www.w3.org/2000/svg">
+          <title id="logoTitle">Mangesh Logo</title>
+          <desc id="logoDesc">A logo combining a code bracket merged with the letter M, next to the wordmark MANGESH.
+          </desc>
+          <g class="logo-braces" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M 230 70 L 205 70 Q 190 70 190 85 L 190 105 Q 190 115 180 120 Q 190 125 190 135 L 190 155 Q 190 170 205 170 L 230 170" />
+            <path
+              d="M 405 70 L 430 70 Q 445 70 445 85 L 445 105 Q 445 115 455 120 Q 445 125 445 135 L 445 155 Q 445 170 430 170 L 405 170" />
+          </g>
+          <path class="logo-m"
+            d="M 255 165 L 255 75 L 280 165 L 305 75 L 305 165 L 330 165 L 330 75 L 355 165 L 380 75 L 380 165"
+            fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+          <text class="logo-text" x="317.5" y="202" text-anchor="middle" font-size="30" font-weight="600"
+            letter-spacing="3">MANGESH</text>
+        </svg>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="#hero" class="nav-link active">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#timeline" class="nav-link">Journey</a></li>
+          <li><a href="#certifications" class="nav-link">certifications</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+          {% if current_user.is_authenticated %}
+          <li><a href="/logout" class="nav-link">Logout</a></li>
+          {% endif%}
+        </ul>
+      </nav>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme">
+          <svg class="fa-solid fa-moon svg-icon" viewBox="0 0 24 24">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
+          <svg class="fa-solid fa-sun svg-icon" viewBox="0 0 24 24" width="24" height="24">
+            <!-- Sun Center -->
+            <circle cx="12" cy="12" r="4" fill="#C4A482" />
+            <!-- Sun Rays -->
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+              fill="none" stroke="#C4A482" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <button class="hamburger-btn" id="hamburgerBtn" aria-expanded="false"
+          aria-label="Toggle Mobile Navigation Drawer">
+          <span class="hamburger-line hamburger-line-1"></span>
+          <span class="hamburger-line hamburger-line-2"></span>
+          <span class="hamburger-line hamburger-line-3"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="nav-overlay" id="navOverlay"></div>
+  <div class="nav-drawer" id="navDrawer" aria-modal="true" role="dialog" aria-label="Mobile Navigation">
+    <ul class="nav-drawer-menu">
+      <li><a href="#hero" class="nav-drawer-link">Home</a></li>
+      <li><a href="#about" class="nav-drawer-link">About</a></li>
+      <li><a href="#projects" class="nav-drawer-link">Projects</a></li>
+      <li><a href="#skills" class="nav-drawer-link">Skills</a></li>
+      <li><a href="#timeline" class="nav-drawer-link">Journey</a></li>
+      <li><a href="#certifications" class="nav-link">certifications</a></li>
+      <li><a href="#contact" class="nav-drawer-link">Contact</a></li>
+    </ul>
+    <div class="nav-drawer-actions">
+      <!-- Direct Contact inside Drawer -->
+      <p
+        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); text-align: center;">
+        Get in Touch</p>
+      <a href="mailto:mangesh@example.com"
+        style="text-align: center; font-weight: 700; color: var(--color-medium-brown);">mangesh@example.com</a>
+    </div>
+  </div>
+
+  <!-- Main Content Shell -->
+  <main>
+
+    <!-- 00 / HERO SECTION -->
+    <section id="hero" class="hero">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="container hero-grid">
+
+        <div class="hero-content reveal">
+          <span class="hero-tag">Welcome to my space</span>
+          <h1 class="hero-title">
+            Mangesh Mahajan
+          </h1>
+          <p class="hero-desc">
+            IT Student & Self-Taught Developer | building toward Web Development and Data Science/Machine Learning.
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">View Work <svg class="svg-icon" viewBox="0 0 320 512">
+                <path
+                  d="M2 374.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l89.3 89.3V24c0-13.3 10.7-24 24-24s24 10.7 24 24v394.7l89.3-89.3c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-144 144c-12.5 12.5-32.8 12.5-45.3 0l-144-144z" />
+              </svg></a>
+            <a href="#contact" class="btn btn-secondary">Contact Me <svg class="svg-icon" viewBox="0 0 24 24">
+                <path
+                  d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg></a>
+          </div>
+        </div>
+
+        <div class="hero-image-wrapper reveal delay-1">
+          <div class="hero-image-frame">
+            <div class="hero-image-container">
+              <!-- Avatar -->
+              <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Mangesh Portrait"
+                class="hero-avatar">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="scroll-down">
+        <span>Scroll Down</span>
+        <svg class="svg-icon" viewBox="0 0 24 24">
+          <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- 01 / ABOUT ME SECTION -->
+    <section id="about" class="section-padding">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="section-num">ABOUT ME</span>
+          <h2 class="section-title">Building real projects, <span>not just tutorials</span></h2>
+        </div>
+
+        <div class="about-grid">
+
+          <div class="about-image-wrapper reveal">
+            <div class="about-backdrop"></div>
+            <div class="about-image-frame">
+              <!-- Workspace image placeholder -->
+              <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Workspace Desk Aesthetic"
+                class="about-img">
+            </div>
+          </div>
+
+          <div class="about-content reveal delay-1">
+            <h3 class="about-tagline">I learn by building real-world solutions and experiments.</h3>
+            <p class="about-bio">
+              I learn by building real projects rather than just tutorials. Currently, I am deep in Python, Flask, and
+              SQL, working toward full-stack web development now and Machine Learning / Data Science later.
+            </p>
+            <p class="about-bio" style="margin-top: -1rem;">
+              I enjoy developing robust backend architectures, managing databases, and styling clean interfaces. I am
+              focused on mastering the modern web ecosystem before expanding into data analysis and intelligent systems.
+            </p>
+
+            <div class="about-stats">
+              <div class="stat-box">
+                <h4>10+</h4>
+                <p>Projects Built</p>
+              </div>
+              <div class="stat-box">
+                <h4>100+</h4>
+                <p>Days of Code</p>
+              </div>
+              <div class="stat-box">
+                <h4>I²IT</h4>
+                <p>Pune IT Student</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 02 / PROJECTS SECTION -->
+    <section id="projects" class="section-padding">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="section-num">FEATURED PROJECTS</span>
+          <h2 class="section-title">Selected digital <span>masterpieces</span></h2>
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('project') }}" class="add-project-link" aria-label="Add New Project">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+
+        <div class="projects-grid">
+
+          {% for project in projects %}
+          <div class="project-card reveal delay-{{project.id}}">
+            <div class="project-image-wrapper">
+              <img src="..\static\images\{{project.img}}" alt="images of the project" class="project-img">
+            </div>
+            <div class="project-content">
+              <div class="project-tags">
+                {% for project_tag in project.tech_stack.split(',') %}
+                <span class="project-tag">{{project_tag}}</span>
+                {% endfor %}
+              </div>
+              <h3 class="project-title">{{project.title}}</h3>
+              <p class="project-desc">
+                {{ project.description|safe }}</p>
+              <div class="project-links">
+                {% if project.live_link %}
+                <a href="{{project.live_link}}" target="_blank" class="project-link"><svg class="svg-icon"
+                    viewBox="0 0 24 24">
+                    <path
+                      d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z" />
+                  </svg> Live Demo</a>
+                {% endif %}
+                {% if project.git_repo %}
+                <a href="{{project.git_repo}}" target="_blank" class="project-link"><svg class="svg-icon"
+                    viewBox="0 0 496 512">
+                    <path
+                      d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.5 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z" />
+                  </svg> GitHub</a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <a href="{{url_for('edit_project',id=project.id)}}">📝Edit</a>
+                <a href="{{url_for('delete_project',id=project.id)}}">🗑️Delete</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 03 / SKILLS SECTION -->
+    <section id="skills" class="section-padding skills">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="section-num">CORE SKILLS</span>
+          <h2 class="section-title">My technical <span>capabilities</span></h2>
+        </div>
+
+        <div class="skills-grid reveal">
+
+          <div class="skills-content">
+            <h3>Robust backend & modern web.</h3>
+            <p>
+              I build functional applications by combining backend frameworks, secure databases, and responsive layouts.
+              My focus is on writing clean, maintainable code and solving real user problems.
+            </p>
+            <p style="margin-bottom: 2rem;">
+              Here are the languages, frameworks, and databases I work with, grouped by my current skill stacks:
+            </p>
+
+            <div class="badge-grid">
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 448 512">
+                  <path
+                    d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-67.9 67.8H177.1c-14.7 0-26.6 11.9-26.6 26.6v74.5c0 26.2 21.1 47.9 47.3 47.9h40.2a67.9 67.9 0 0 0 67.8-67.8v-34h-41c-28.5 0-51.5-23-51.5-51.5v-26.8c0-14.7 11.9-26.6 26.6-26.6h120.4c35.6 0 62.4-27.8 62.4-63.1l-.2-39.7zM108.2 311.5c7.7 30.9 22.3 54.2 53.4 54.2h40.1v-47.4c0-36.8 31.2-67.8 67.9-67.8h101.3c14.7 0 26.6-11.9 26.6-26.6v-74.5c0-26.2-21.1-47.9-47.3-47.9h-40.2a67.9 67.9 0 0 0-67.8 67.8v34h41c28.5 0 51.5 23 51.5 51.5v26.8c0 14.7-11.9 26.6-26.6 26.6H108.2c-35.6 0-62.4 27.8-62.4 63.1l.2 39.7zm181-197a15.8 15.8 0 1 1-31.6 0 15.8 15.8 0 0 1 31.6 0zm-130.2 258a15.8 15.8 0 1 1-31.6 0 15.8 15.8 0 0 1 31.6 0z" />
+                </svg> Python</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 448 512">
+                  <path
+                    d="M0 32l34.9 395.8L191.7 480l156-52.2L384 32H0zm308 141H130l4 39h170l-9 104-74.3 25.2-74.3-25.2-4.7-55H98l7 96 109 36.3 109-36.3 14.3-159H138l-4-41h204l6-41H131l-4-41h221l-4.7 41.3z" />
+                </svg> HTML5 / CSS3</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 448 512">
+                  <path
+                    d="M0 32v448h448V32H0zm243.8 349.4c0 43.6-25.6 76.1-71.1 76.1-24 0-47.1-10.4-56.1-26.2l31.6-18.3c7.2 12.6 18.8 19.3 30.6 19.3 22.1 0 32.9-11.5 32.9-38.3V233.8h41.9v147.6zm99.5-.4c-.4 26-16.1 43.8-43.7 43.8-22.1 0-38.5-11.8-45.6-30.1l32.2-18.7c5.1 9.4 12.9 14.1 20.3 14.1 9.9 0 14.9-5.1 14.9-13.4 0-9.2-6.5-12.7-22.1-19.3-25.8-10.8-44.4-22.8-44.4-52 0-27.8 21.5-49.3 52.8-49.3 22.8 0 41.4 11.5 48.6 28.5l-30.6 18c-4.4-8.4-11.5-12-18.3-12-8.2 0-11.5 4.3-11.5 9.8 0 7.3 5.1 10.2 18 15.7 30.2 13 46.1 23.9 46.1 53.6v-.9z" />
+                </svg> JS Basics</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 512 512">
+                  <path
+                    d="M64 32C28.7 32 0 60.7 0 96v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm288 88a24 24 0 1 1 48 0 24 24 0 1 1-48 0zm-96 0a24 24 0 1 1 48 0 24 24 0 1 1-48 0zM64 288c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64v-64c0-35.3-28.7-64-64-64H64zm288 88a24 24 0 1 1 48 0 24 24 0 1 1-48 0zm-96 0a24 24 0 1 1 48 0 24 24 0 1 1-48 0z" />
+                </svg> Flask</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 512 512">
+                  <path
+                    d="M116.7 33.8c4.5-10.3 14.7-17 25.8-17h227c11.1 0 21.3 6.7 25.8 17l64 144c3.4 7.7 2.4 16.7-2.6 23.5l-232 312c-6.2 8.3-16.1 13.2-26.7 13.2s-20.5-4.9-26.7-13.2l-232-312c-5-6.8-6-15.8-2.6-23.5l64-144zM256 74.2v314.7l175.7-236.4L256 74.2zm-28 314.7V74.2l-175.7 118.3 175.7 236.4z" />
+                </svg> SQLAlchemy</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 448 512">
+                  <path
+                    d="M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80c0-44.2 100.3-80 224-80S448 35.8 448 80zm0 120v48c0 44.2-100.3 80-224 80S0 292.2 0 248v-48c0 44.2 100.3 80 224 80s224-35.8 224-80zm0 120v48c0 44.2-100.3 80-224 80S0 412.2 0 368v-48c0 44.2 100.3 80 224 80s224-35.8 224-80z" />
+                </svg> PostgreSQL (Neon)</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 512 512">
+                  <path
+                    d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm64 64H448V96H64v64zm384 80H64v176H448V240z" />
+                </svg> Jinja2 Templates</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 496 512">
+                  <path
+                    d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.5 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z" />
+                </svg> Git / GitHub</span>
+              <span class="skill-badge"><svg class="svg-icon" style="color:#995F2F; margin-right:0.5rem;"
+                  viewBox="0 0 512 512">
+                  <path
+                    d="M384 192c0-88.4-71.6-160-160-160S64 103.6 64 192c0 34.3 10.8 66 29.2 92.2L64 384h115.8c23 37.1 63.8 64 112.2 64h16c48.4 0 89.2-26.9 112.2-64H448l-29.2-99.8c18.4-26.2 29.2-57.9 29.2-92.2zm-160 96c-53 0-96-43-96-96s43-96 96-96s96 43 96 96s-43 96-96 96z" />
+                </svg> NumPy / Pandas</span>
+            </div>
+          </div>
+
+          <div class="skill-bars">
+            <div class="skill-bar-wrapper">
+              <div class="skill-info">
+                <span>PYTHON & BACKEND (FLASK)</span>
+                <span>85%</span>
+              </div>
+              <div class="skill-progress-bar">
+                <div class="skill-progress-bar-fill" style="--progress: 85%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-bar-wrapper">
+              <div class="skill-info">
+                <span>DATABASE MANAGEMENT & SQL</span>
+                <span>80%</span>
+              </div>
+              <div class="skill-progress-bar">
+                <div class="skill-progress-bar-fill" style="--progress: 80%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-bar-wrapper">
+              <div class="skill-info">
+                <span>FRONTEND STACK (HTML/CSS/JS)</span>
+                <span>75%</span>
+              </div>
+              <div class="skill-progress-bar">
+                <div class="skill-progress-bar-fill" style="--progress: 75%;"></div>
+              </div>
+            </div>
+
+            <div class="skill-bar-wrapper">
+              <div class="skill-info">
+                <span>DATA SCIENCE (NUMPY/PANDAS)</span>
+                <span>60%</span>
+              </div>
+              <div class="skill-progress-bar">
+                <div class="skill-progress-bar-fill" style="--progress: 60%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 / JOURNEY & EDUCATION TIMELINE -->
+    <section id="timeline" class="section-padding">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-num">MY PATHWAY</span>
+          <h2 class="section-title">Learning Journey & <span>Education</span></h2>
+        </div>
+
+        <div class="timeline-split-grid">
+
+          <!-- Experience Column -->
+          <div class="reveal">
+            <div class="timeline-column-header">
+              <h3 class="timeline-column-title"><svg class="svg-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                </svg> Learning Journey</h3>
+              {% if current_user.is_authenticated %}
+              <a href="{{ url_for('journey') }}" class="add-journey-link" aria-label="Add New Journey">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+              </a>
+              {% endif %}
+            </div>
+            <div class="timeline-container">
+
+              {% for item in learning_journey %}
+              <div class="timeline-item">
+                <div class="timeline-node"></div>
+                <div class="timeline-card">
+                  <div class="timeline-header">
+                    <span class="timeline-date">{{ item.time_line }}</span>
+                    <span class="timeline-company">{{ item.Category }}</span>
+                  </div>
+                  <h4 class="timeline-role">{{ item.title }}</h4>
+                  <p class="timeline-desc">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+          </div>
+
+          <!-- Education Column -->
+          <div class="reveal delay-1">
+            <div class="timeline-column-header">
+              <h3 class="timeline-column-title"><svg class="svg-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5.89 12.5L12 15.8l6.11-3.33L12 9.17l-6.11 3.33zM12 17.5c-2.33 0-4.31-1.29-5.3-3.2l-1.74.95C6.46 17.92 9 20 12 20s5.54-2.08 7.04-4.75l-1.74-.95c-.99 1.91-2.97 3.2-5.3 3.2z" />
+                </svg> Education</h3>
+              {% if current_user.is_authenticated %}
+              <a href="{{ url_for('education') }}" class="add-education-link" aria-label="Add New Education">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+              </a>
+              {% endif %}
+            </div>
+            <div class="timeline-container">
+
+              {% for item in education_journey %}
+              <div class="timeline-item">
+                <div class="timeline-node"></div>
+                <div class="timeline-card">
+                  <div class="timeline-header">
+                    <span class="timeline-date">{{ item.time_line }}</span>
+                    <span class="timeline-company">{{ item.Category }}</span>
+                  </div>
+                  <h4 class="timeline-role">{{ item.title }}</h4>
+                  <p class="timeline-desc">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </div>
+              {% endfor %}
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 05 / CERTIFICATIONS SECTION -->
+    <section id="certifications" class="section-padding certifications">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="section-num">VERIFICATIONS</span>
+          <h2 class="section-title">Industry <span>Certifications</span></h2>
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('certificate') }}" class="add-certificate-link" aria-label="Add New certificate">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+
+        <div class="cert-grid">
+          {% for certificate in all_certificates %}
+          <a href="..\static\images\{{certificate.img}}">
+            <div class="cert-card reveal delay-{{certificate.id}}">
+              <div class="cert-icon-box">
+                {% if svg_list[loop.index0] %}
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                  <path d="{{svg_list[loop.index0]}}" />
+                </svg>
+                {% else %}
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                  <path d="{{svg_list[1]}}" />
+                </svg>
+                {% endif %}
+              </div>
+              <span class="cert-issuer">{{certificate.issued_aut}}</span>
+              <h3 class="cert-title">{{certificate.skill}}</h3>
+              <span class="cert-date">{{certificate.issued_date}}</span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 06 / CONTACT SECTION -->
+    <section id="contact" class="section-padding contact">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="section-num">GET IN TOUCH</span>
+          <h2 class="section-title">Let us start <span>something new</span></h2>
+        </div>
+
+        <div class="contact-grid">
+
+          <!-- Contact Left Panel Info -->
+          <div class="contact-info-panel reveal">
+            <h3 class="contact-headline">Have a proposal <span>in mind?</span></h3>
+            <p class="contact-desc">
+              I am always open to discussing web development projects, ML collaboration opportunities, or general tech
+              discussions. Feel free to reach out!
+            </p>
+
+            <div class="contact-methods">
+              <div class="contact-method-card">
+                <div class="contact-method-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                  </svg>
+                </div>
+                <div class="contact-method-info">
+                  <h5>Direct Email</h5>
+                  <p>mangesham001@gmail.com</p>
+                </div>
+              </div>
+
+              <div class="contact-method-card">
+                <div class="contact-method-icon">
+                  <svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                  </svg>
+                </div>
+                <div class="contact-method-info">
+                  <h5>Base Location</h5>
+                  <p>Pune, Maharashtra, India</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Media Icon Grid -->
+            <div class="contact-socials-wrapper">
+              <h4 class="contact-socials-title">Follow my streams</h4>
+              <div class="social-links">
+                <a href="https://github.com/mangeshmahajan-code" class="social-link"
+                  aria-label="Mangesh's GitHub profile"><svg class="svg-icon" viewBox="0 0 496 512">
+                    <path
+                      d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.5 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z" />
+                  </svg></a>
+                <a href="www.linkedin.com/in/mangeshmahajan05" class="social-link"
+                  aria-label="Mangesh's LinkedIn profile"><svg class="svg-icon" viewBox="0 0 448 512">
+                    <path
+                      d="M100.28 448H7.4V148.9h92.88V448zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+                  </svg></a>
+                <a href="mailto:mangesham001@gmail.com" class="social-link" aria-label="Mangesh's Discord profile"><svg
+                    class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                  </svg></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form Right Panel -->
+          <div class="contact-form-wrapper reveal delay-1">
+            <!-- Form State -->
+            <form class="contact-form" id="contactForm" method="POST" novalidate {% if success or error
+              %}style="display: none;" {% endif %}>
+              {{ form.csrf_token }}
+              <div class="form-group">
+                <label for="formName" class="form-label">Full Name</label>
+                {{ form.name(id="formName", class="form-input", placeholder="Your Name", required=true) }}
+                <span class="form-error-msg" id="nameError"><svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                  </svg> Please enter your name.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="formEmail" class="form-label">Email Address</label>
+                {{ form.email(id="formEmail", class="form-input", placeholder="you@domain.com", required=true) }}
+                <span class="form-error-msg" id="emailError"><svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                  </svg> Please provide a valid email.</span>
+              </div>
+
+              <div class="form-group">
+                <label for="formMessage" class="form-label">Your Message</label>
+                {{ form.msg(id="formMessage", class="form-input form-textarea", placeholder="Describe your proposal...",
+                required=true) }}
+                <span class="form-error-msg" id="messageError"><svg class="svg-icon" viewBox="0 0 24 24">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                  </svg> Message content cannot be empty.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="formSubmitBtn" method='POST'>
+                Send Message <svg class="svg-icon" viewBox="0 0 24 24">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </button>
+            </form>
+
+            <!-- Success Mock State -->
+            <div class="contact-success-card" id="contactSuccessCard" {% if success %}style="display: flex;" {% endif
+              %}>
+              <div class="success-icon">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                </svg>
+              </div>
+              <h3 class="success-title">Message Received!</h3>
+              <p class="success-desc">
+                Thank you for reaching out. Mangesh will review your proposal and respond shortly.
+              </p>
+              <button class="btn btn-secondary" id="formResetBtn">Send Another Message</button>
+            </div>
+
+            <!-- Error State -->
+            <div class="contact-error-card" id="contactErrorCard" {% if error %}style="display: flex;" {% endif %}>
+              <div class="error-icon">
+                <svg class="svg-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </svg>
+              </div>
+              <h3 class="error-title">Message Failed to Send</h3>
+              <p class="error-desc">
+                We're experiencing heavy volume or a rate limit issue. Please try again after some time.
+              </p>
+              <button class="btn btn-secondary" id="formErrorResetBtn">Try Again</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Navigation & Copyright -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <a href="#hero" class="footer-logo" aria-label="Mangesh Homepage">
+        <svg class="logo-svg" viewBox="175 65 285 150" role="img" aria-labelledby="footerLogoTitle footerLogoDesc"
+          xmlns="http://www.w3.org/2000/svg">
+          <title id="footerLogoTitle">Mangesh Logo</title>
+          <desc id="footerLogoDesc">A logo combining a code bracket merged with the letter M, next to the wordmark
+            MANGESH.</desc>
+          <g class="logo-braces" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+            <path
+              d="M 230 70 L 205 70 Q 190 70 190 85 L 190 105 Q 190 115 180 120 Q 190 125 190 135 L 190 155 Q 190 170 205 170 L 230 170" />
+            <path
+              d="M 405 70 L 430 70 Q 445 70 445 85 L 445 105 Q 445 115 455 120 Q 445 125 445 135 L 445 155 Q 445 170 430 170 L 405 170" />
+          </g>
+          <path class="logo-m"
+            d="M 255 165 L 255 75 L 280 165 L 305 75 L 305 165 L 330 165 L 330 75 L 355 165 L 380 75 L 380 165"
+            fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+          <text class="logo-text" x="317.5" y="202" text-anchor="middle" font-size="30" font-weight="600"
+            letter-spacing="3">MANGESH</text>
+        </svg>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <nav aria-label="Footer Navigation">
+        <ul class="footer-links">
+          <li><a href="#hero" class="footer-link">Home</a></li>
+          <li><a href="#about" class="footer-link">About</a></li>
+          <li><a href="#projects" class="footer-link">Projects</a></li>
+          <li><a href="#skills" class="footer-link">Skills</a></li>
+          <li><a href="#timeline" class="footer-link">Journey</a></li>
+          <li><a href="#certifications" class="nav-link">certifications</a></li>
+          <li><a href="#contact" class="footer-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <p class="footer-copy">
+        &copy; 2026 Mangesh. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll back to top of the page">
+    <svg class="svg-icon" viewBox="0 0 24 24">
+      <path d="M4 12l1.41 1.41L11 6.83V20h2V6.83l5.58 5.59L20 12l-8-8-8 8z" />
+    </svg>
+  </button>
+
+  <!-- External Script -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

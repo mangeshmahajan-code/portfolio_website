@@ -1,0 +1,6 @@
+portfolio.db
+.env
+venv/
+__pycache__/
+portfolio.venv/
+.DS_Store
