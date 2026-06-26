@@ -34,6 +34,10 @@ login_manager.login_message = "You need to login to access that page."
 def load_user(user_id):
     return db.get_or_404(Admin,user_id)
 
+@app.context_processor
+def inject_version():
+    return dict(APP_VERSION='1.0.0')
+
 svg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'svg.txt')
 with open(svg_path, 'r') as svg:
     data = svg.read().split('\n')

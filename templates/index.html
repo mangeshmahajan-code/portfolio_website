@@ -1,6 +1,6 @@
 {% from "bootstrap5/form.html" import render_form %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -21,13 +21,13 @@
   <!-- Critical Script: Prevent Theme Flash -->
   <script>
     (function () {
-      const savedTheme = localStorage.getItem('vane-portfolio-theme') || 'light';
+      const savedTheme = localStorage.getItem('vane-portfolio-theme') || 'dark';
       document.documentElement.setAttribute('data-theme', savedTheme);
     })();
   </script>
 
   <!-- External Stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=APP_VERSION) }}">
   <style>
     .add-project-link,
     .add-certificate-link,
@@ -860,7 +860,7 @@
   </button>
 
   <!-- External Script -->
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js', v=APP_VERSION) }}"></script>
 </body>
 
 </html>

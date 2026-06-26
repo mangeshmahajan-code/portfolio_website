@@ -1,12 +1,19 @@
 {% from "bootstrap5/form.html" import render_form %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Critical Script: Prevent Theme Flash -->
+    <script>
+      (function () {
+        const savedTheme = localStorage.getItem('vane-portfolio-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=APP_VERSION) }}">
     <style>
 
     </style>
