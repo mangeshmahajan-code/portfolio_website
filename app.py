@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash ,request
+from flask import Flask, render_template, redirect, url_for, flash ,request,send_from_directory
 # pyrefly: ignore [missing-import]
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer,String,Text
@@ -254,6 +254,15 @@ def delete_project (id):
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route("/robots.txt")
+def robots():
+    return send_from_directory(
+        app.static_folder,
+        "robots.txt",
+        mimetype="text/plain"
+    )
 
 if __name__ == '__main__':
     app.run(debug=False)
